@@ -1,3 +1,3 @@
-module getenv
+module github.com/dpogorzelski/getenv
 
-go 1.15
+go 1.17

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
@@ -13,7 +13,6 @@ import (
 func main() {
 	prefix := flag.String("prefix", "", "a string")
 	flag.Parse()
-	// keys := flag.Args()
 
 	var c = &http.Client{
 		Timeout: time.Second * 5,
@@ -21,25 +20,18 @@ func main() {
 
 	req, err := http.NewRequest("GET", "http://metadata/computeMetadata/v1/instance/attributes?recursive=true", nil)
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
+
 	req.Header.Add("Metadata-Flavor", "Google")
 	res, err := c.Do(req)
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 	defer res.Body.Close()
-	// data, err := ioutil.ReadAll(res.Body)
-	// if err != nil {
-	// 	fmt.Fprint(os.Stderr, err)
-	// 	os.Exit(1)
-	// }
 
 	if res.StatusCode != 200 {
-		fmt.Fprintf(os.Stderr, "couldn't fetch metadata attributes")
-		os.Exit(1)
+		log.Fatal("couldn't fetch metadata attributes")
 	}
 
 	items := make(map[string]string)
@@ -47,16 +39,10 @@ func main() {
 
 	err = json.NewDecoder(res.Body).Decode(&items)
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	for k, v := range items {
-		// matched, err := regexp.MatchString(`a.b`, "aaxbb")
-		// if err != nil {
-		// 	fmt.Fprint(os.Stderr, err)
-		// 	os.Exit(1)
-		// }
 		vars[strings.ToUpper(k)] = v
 	}
 
