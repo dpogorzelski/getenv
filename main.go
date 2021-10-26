@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	prefix := flag.String("prefix", "", "Variable's prefix")
+	prefix := flag.String("prefix", "", "Prefix to append to the ENV var names in the output")
 	flag.Parse()
 
 	var client = &http.Client{
