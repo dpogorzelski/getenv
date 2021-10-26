@@ -14,7 +14,7 @@ func main() {
 	prefix := flag.String("prefix", "", "a string")
 	flag.Parse()
 
-	var c = &http.Client{
+	var client = &http.Client{
 		Timeout: time.Second * 5,
 	}
 
@@ -24,7 +24,7 @@ func main() {
 	}
 
 	req.Header.Add("Metadata-Flavor", "Google")
-	res, err := c.Do(req)
+	res, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
