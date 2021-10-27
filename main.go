@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -20,18 +20,21 @@ func main() {
 
 	req, err := http.NewRequest("GET", "http://metadata/computeMetadata/v1/instance/attributes?recursive=true", nil)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprint(os.Stderr, err)
+		os.Exit(1)
 	}
 
 	req.Header.Add("Metadata-Flavor", "Google")
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprint(os.Stderr, err)
+		os.Exit(1)
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != 200 {
-		log.Fatal("couldn't fetch metadata attributes")
+		fmt.Fprint(os.Stderr, "couldn't fetch metadata attributes")
+		os.Exit(1)
 	}
 
 	items := make(map[string]string)
@@ -39,7 +42,8 @@ func main() {
 
 	err = json.NewDecoder(res.Body).Decode(&items)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprint(os.Stderr, err)
+		os.Exit(1)
 	}
 
 	for k, v := range items {
