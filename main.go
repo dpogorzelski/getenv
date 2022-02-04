@@ -11,7 +11,8 @@ import (
 )
 
 func main() {
-	prefix := flag.String("prefix", "", "Prefix to append to the ENV var names in the output")
+	prefix := flag.String("prefix", "", "Only fetch metadata items that match this prefix")
+	prepend := flag.String("prepend", "", "Prepend this string to the ENV var names in the output")
 	flag.Parse()
 
 	var client = &http.Client{
@@ -47,12 +48,14 @@ func main() {
 	}
 
 	for k, v := range items {
-		vars[strings.ToUpper(k)] = v
+		if strings.HasPrefix(k, *prefix) {
+			vars[strings.ToUpper(k)] = v
+		}
 	}
 
 	for k, v := range vars {
-		if *prefix != "" {
-			fmt.Printf("%s_%s=%s\n", *prefix, k, v)
+		if *prepend != "" {
+			fmt.Printf("%s_%s=%s\n", strings.ToUpper(*prepend), k, v)
 		} else {
 			fmt.Printf("%s=%s\n", k, v)
 		}
