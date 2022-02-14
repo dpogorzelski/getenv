@@ -11,7 +11,7 @@ MY_VARIABLE=SOMEVALUE
 
 Export all metadata attributes as ENV variables for current shell session and store them in /etc/environment for future sessions:
 ```bash
-export $(./getenv)
+export $(getenv)
 getenv 1>> /etc/environment
 ```
 or
