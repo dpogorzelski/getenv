@@ -1,5 +1,5 @@
 ## What's this?
-`getenv` will fetch GCE metadata attributes and print them as K=V pairs ready to be `exported` as environment variables.
+`getenv` will fetch Google Cloud (Compute Engine) metadata attributes and print them as K=V pairs ready to be `exported` as environment variables.
 
 Example:
 ```bash
